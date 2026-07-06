@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madhurary | The Official Madhur Model Dictionary</title>
+    <style>
+        :root {
+            --bg-color: #0B0E14;
+            --text-color: #E2E8F0;
+            --card-bg: #151A23;
+            --accent-color: #E11D48;
+            --accent-hover: #BE123C;
+            --border-color: #2D3748;
+            --text-muted: #A0AEC0;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 1rem 3rem 1rem;
+            background: linear-gradient(180deg, rgba(21,26,35,1) 0%, rgba(11,14,20,1) 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .system-alert {
+            display: inline-block;
+            background-color: rgba(225, 29, 72, 0.15);
+            color: var(--accent-color);
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(225, 29, 72, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            text-transform: uppercase;
+        }
+
+        header h1 span { color: var(--accent-color); }
+
+        header p {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            border-color: var(--accent-color);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #4A5568;
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin: 0 0 1rem 0;
+            color: white;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .origin-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-color);
+            text-decoration: none;
+            padding: 0.6rem 0;
+            font-weight: 600;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+            text-transform: uppercase;
+        }
+
+        .origin-link:hover { color: var(--accent-hover); }
+
+        .suggestion-box {
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border: 1px dashed var(--border-color);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .suggestion-box h2 {
+            margin-top: 0;
+            color: white;
+        }
+
+        .suggestion-box p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .suggestion-box input, .suggestion-box textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: white;
+            font-family: inherit;
+        }
+
+        .suggestion-box button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        .suggestion-box button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .empty-state {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 3rem;
+            color: var(--text-muted);
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="system-alert" onclick="alert('Are you actually enjoying this or just pretending? \n\n(Sike, I know you are)')">📢 System Alert: "Aap Enjoy toh kar rahe ho na?"</div>
+        <h1>Madhur<span>ary</span></h1>
+        <p>Where lore performs in front of a live audience, and the audience performs for the lore.</p>
+    </header>
+
+    <div class="container">
+        <div class="search-container">
+            <input type="text" class="search-bar" id="searchInput" placeholder="Search the Raw lore (e.g., Sike, Pushpendra)..." onkeyup="filterCards()">
+        </div>
+
+        <div class="grid" id="glossaryGrid">
+            <!-- Cards populated by JS -->
+        </div>
+        
+        <div class="empty-state" id="emptyState">
+            Bole toh takleef! No lore found. Just like this show's profit margins.
+        </div>
+
+        <!-- Connected Formspree Form -->
+        <div class="suggestion-box">
+            <h2>Suggest New Lore</h2>
+            <p>If your suggestion is trash, it will be rejected. "Thanks for sharing the final draft."</p>
+            <form action="https://formspree.io/f/xgojdbnz" method="POST">
+                <input type="email" name="email" placeholder="Your Email" required>
+                <input type="text" name="Term" placeholder="Lore Title (e.g., Pirag Chanjwani)" required>
+                <textarea name="message" rows="3" placeholder="Context (Explain it like I'm a paid audience member)" required></textarea>
+                <input type="url" name="YoutubeLink" placeholder="YouTube Timestamp Link (Optional)">
+                <button type="submit">Submit for Approval</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>Madhurary © 2026 | Built for the Raw Army</p>
+        <p style="font-size: 0.8rem; margin-top: 10px;">Warning: This site is running in heavy losses.</p>
+    </footer>
+
+    <script>
+        console.log("Ah, checking the console? Thanks for sharing the final draft.");
+
+        const glossaryData = [
+            { 
+                title: "Best F**king Show (Variation)", 
+                link: "https://youtu.be/dbTVJpr-BCE?si=9-e8cL-DcZiLcyLH&t=396", 
+                desc: "Inspired by Kill Tony, Madhur falsely hypes the room shouting 'This is the best show of this universe!', only to drop a self-deprecating reality check about the show running in heavy losses." 
+            },
+            { 
+                title: "Psych / Sike", 
+                link: "https://youtu.be/rLP3zOb5hRE?si=8aYs62uxJ34fZyht&t=80", 
+                desc: "The ultimate editor's betrayal. Madhur will confidently tell someone 'Main ye part edit pe kaat dunga', but the editor keeps the embarrassing footage in and flashes '(Sike)' on screen." 
+            },
+            { 
+                title: "Aap Enjoy toh kar rahe ho na?", 
+                link: "https://youtu.be/zQ_T07F31os?si=w-6F4Tn-jO-4XN8t&t=935", 
+                desc: "Madhur's go-to defense mechanism. Asked purely out of insecurity right after a terribly awkward set, a chaotic betting session, or when the room falls dead silent." 
+            },
+            { 
+                title: "Pushpendra x3", 
+                link: "https://youtu.be/dbTVJpr-BCE?si=pVFjbNK5M_MsHc5a&t=3762", 
+                desc: "During a rap battle attempt, the entire audience derailed the show by chanting the comic's name 'Pushpendra' like a political election rally. Absolute cinema." 
+            },
+            { 
+                title: "Weird Upload Timing", 
+                link: "", 
+                desc: "Because dropping a 2-hour long stand-up comedy video on a random weekday at 11:00 PM makes perfect sense to the YouTube algorithm." 
+            },
+            { 
+                title: "Giveaway > Betting", 
+                link: "https://youtu.be/1MoCQf2DKVc?si=FLeyA3znYWhiV1T8&t=60", 
+                desc: "Madhur calling the cash distribution a 'Giveaway' to avoid YouTube's gambling guidelines, but proudly calling it what it actually is: raw, unadulterated 'Satta'." 
+            },
+            { 
+                title: "Rejected!", 
+                link: "https://youtu.be/Ie8Ktt9dkoU?si=N8RGhUkoKGos7oqw&t=2069", 
+                desc: "The brutal reality check when a comic tries to shoot his shot from the stage and gets instantly humbled by the audience." 
+            },
+            { 
+                title: "Why is Chirag a P-word", 
+                link: "https://youtu.be/lIxttu_L-QA?si=Ij959coptKCuaTZV&t=240", 
+                desc: "A terrifying running gag where Madhur casually accuses Chirag Panjwani of terrible crimes, forcing Chirag to defend his innocence to other Bangalore comics." 
+            },
+            { 
+                title: "Pirag Chanjwani", 
+                link: "https://youtu.be/lIxttu_L-QA?si=sd122fCm2t6-CE5n&t=2100", 
+                desc: "The legendary alter-ego born out of Madhur deliberately mispronouncing Chirag's name just to disrespect him on his own panel." 
+            },
+            { 
+                title: "7x4 = 24", 
+                link: "https://youtu.be/V1aqwv0bUeM?si=JPNo93yAPJkdr4R7&t=2250", 
+                desc: "The ultimate Girl Math moment. An audience member under 'performance pressure' confidently answered that 7 multiplied by 4 is 24." 
+            }
+        ];
+
+        const grid = document.getElementById('glossaryGrid');
+        const emptyState = document.getElementById('emptyState');
+        const searchInput = document.getElementById('searchInput');
+
+        function renderCards(data) {
+            grid.innerHTML = '';
+            if (data.length === 0) {
+                emptyState.style.display = 'block';
+                return;
+            }
+            emptyState.style.display = 'none';
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                const hasLink = item.link !== "";
+                const linkText = hasLink ? "▶ Watch Context" : "Lore Only (No Link)";
+                const linkClass = hasLink ? "origin-link" : "origin-link disabled";
+
+                card.innerHTML = `
+                    <h3 class="card-title">${item.title}</h3>
+                    <p class="card-desc">${item.desc}</p>
+                    <a href="${item.link}" target="_blank" class="${linkClass}">${linkText}</a>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        renderCards(glossaryData);
+
+        function filterCards() {
+            const query = searchInput.value.toLowerCase().trim();
+            
+            // Easter Eggs
+            if (query === "24" || query === "7x4") {
+                searchInput.value = "";
+                alert("Performance pressure detected. Please re-calculate.");
+                return;
+            }
+            if (query === "chirag") {
+                document.body.style.backgroundColor = "#450a0a";
+                setTimeout(() => document.body.style.backgroundColor = "var(--bg-color)", 500);
+            }
+
+            const filteredData = glossaryData.filter(item => 
+                item.title.toLowerCase().includes(query) || 
+                item.desc.toLowerCase().includes(query)
+            );
+            renderCards(filteredData);
+        }
+    </script>
+</body>
+</html>
